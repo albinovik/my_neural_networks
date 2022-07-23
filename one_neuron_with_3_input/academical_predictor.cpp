@@ -4,6 +4,9 @@
 #include <string>//for getline() using in this program
 #include <sstream>//flows of strings
 #include <vector>//dynamic array from STL
+//#include <ctime>
+#include <chrono>
+#include <thread>
 
 using namespace std;
 
@@ -33,28 +36,26 @@ Each inputs has its own weights.
 
 We can initialize random values, for example:
 First input has weight = 0.2
-Second input has weight = 0.3
-Third input has weight = 0.6
+Second input has weight = 0.8
+Third input has weight = 0.1
 
 We assume also that a function of activation for the neuron has such form:
 
 value = First input * Fist weight + Second input * Second weight + \
         Third input * Third weight
 
-if(value>=0.5) return 1;   - the student passed the exam
-else return  0;            - the student didn't pass the exam
+if(value>=0.5) return 1;   - the student will pass the exam
+else return  0;            - the student won't pass the exam
 
 In the end, we have one value only.
 
-!!!!! Weights can change in a learning process of the neuron.
+!!!!! Weights is changing in a learning process of the neuron.
 */
 
 class Neuron{
     private:
-        array<double,3> weights = {0.2, 0.3, 0.6};//Setting random values for weights
-        //array<double,3> motivation = {1.0, 1.5 , 2.0};
-        //array<double,3> error = {0.0, 0.0, 0.0};//Errors for each weights
-        double error;
+        array<double,3> weights = {0.2, 0.8, 0.1};//Setting random values for weights
+        double error = 1.0;
         double reducing = 0.00001;//additional constant for a deviation reducing
         const int size = 3;//All arrays in this program have size is 3
         
@@ -103,8 +104,6 @@ void Neuron::Train(array<double,3> &init, double &right_result)
     double current_result =InputData(init);
     error = right_result - current_result;
     double correction = (error / current_result) * reducing;
-    //double correction = (error / current_result);
-    //cout << "correction = " << correction << endl;
 
     for (int i = 0; i < size; i++)
     {
@@ -118,26 +117,29 @@ double Neuron::GetWeight(int i)
     return weights[i];
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////
+//                         function beyond any classes                              //
+//////////////////////////////////////////////////////////////////////////////////////
+//double * read_file_for_leaning(string filename)
+vector<vector<double>> read_file_for_leaning(string filename)
+{
 
-int main(){
-    
     /*Data for the neuron training are keeping in file "right_answers.txt"
     This is a database of a last exam for many students, their progresses and results.
     Progresses consist 3 numbers. They are inputs parameters for neuron (INPUT).
     Results are numbers in the end of each string (OUTPUT).
     */
     ifstream fin;//entry flow in file
-    string path = "right_answers.txt";//the name of a file are keeping as a string
+    //string path = "right_answers.txt";//the name of a file are keeping as a string
     ofstream fout;//exit flow from file
 
-    fin.open(path);//It's a file opening
+    fin.open(filename);//It's a file opening
     if (!fin.is_open())//This is the checking that file was opened
     {
         cout << "Error to open your file" << endl;
     }
     else{
-        cout << "The file with name " << path << " was opened." << endl;
+        cout << "The file with name " << filename << " was opened." << endl;
     }
 
     //tuple<string,double,double,double,double> temp;
@@ -147,8 +149,8 @@ int main(){
 
     vector<string> names;
     vector<vector<double>> init_progresses;
-    init_progresses.resize(3, vector<double>(0));
-    vector<double> out_results;
+    init_progresses.resize(4, vector<double>(0));
+    //vector<double> out_results;
 
     string name;
     double a, b, c, results;
@@ -166,7 +168,8 @@ int main(){
                 init_progresses[0].push_back(a);
                 init_progresses[1].push_back(b);
                 init_progresses[2].push_back(c);
-                out_results.push_back(results); 
+                init_progresses[3].push_back(results);
+                //out_results.push_back(results); 
         }
         else line++;
 
@@ -174,52 +177,116 @@ int main(){
 
     fin.close();
 
-    ////////////////////////////////////////////////////////////////////////////
+    return init_progresses;
+
+}
+
+
+//////////////////////////////////////////////////////////////////////////////////////////
+
+int main(){
 
     Neuron n1;//the creating of the neuron
 
     array<double,3> progress_iii;//input data for learning (array for 3 INPUT)
     double result_i;//input data for learning (it is the right answer( 1 OUTPUT))
-
     int epoch = 0;//the sequence number of epoch in the learning of the neuron
-    
-    do
-    {  
-        for (size_t j = 0; j < init_progresses[0].size(); j++)
+
+    vector<vector<double>> data = read_file_for_leaning("right_answers.txt");//reading file with data for leaning process
+
+    cout << "Please wait for the finish of the neuron training. " << endl;
+    cout << "It can take a few minutes " ;//<< endl;
+
+    double tim;  
+    tim = time(0);  
+    //int count = 0;
+
+    for(int i = 0; i < 10; i++)
+    {
+       // sleep(1);
+       // std::cout << "." << std::flush;
+       // sleep(1);
+       // std::cout << "." << std::flush;
+       // sleep(1);
+        //std::cout << "." << std::flush;
+       // sleep(1);
+        //while(time(0) - tim != 5) { } 
+        this_thread::sleep_for(chrono::seconds(2));
+        cout << ". " ;
+        //count++;
+    }
+
+    int rang = int(data[0].size()); 
+ 
+    int control = 1;
+
+    while(n1.GetError()*0.001 > n1.GetReducing() || n1.GetError()*0.001 < -n1.GetReducing())
+    {
+        for (size_t j = 0; j < rang; j++)
         {
-            for (size_t i = 0; i < 3; i++)
-            {
-                progress_iii[i] = init_progresses[i][j];
-                result_i = out_results[j];
-                //cout << "progress_iii[ " << i << " ] = " << progress_iii[i] << "  result_i = " << result_i << endl;
-            }
+            progress_iii[0] = data[0][j]; 
+            progress_iii[1] = data[1][j];
+            progress_iii[2] = data[2][j];
+            result_i = data[3][j];
+
             n1.Train(progress_iii, result_i);
 
-            if(size_t(j) == init_progresses[0].size()-1) epoch++;
-            cout << j << " j,  " << epoch << " epoch, errors:  " << n1.GetError()  << ", weights: " << n1.GetWeight(1) << " | " << n1.GetWeight(2) << " | " << n1.GetWeight(3) << endl;
-        } 
-    } while (n1.GetError()*0.0001 > n1.GetReducing() || n1.GetError()*0.0001 < -n1.GetReducing());
+       }
+       //cout << ".";
+       epoch++;
+       //if(epoch % 50 == 0) {cout << "." ;}
+       //cout << "   epoch: " << epoch << "   errors: " << n1.GetError()  << "   weights: " << n1.GetWeight(1) << " | " << n1.GetWeight(2) << " | " << n1.GetWeight(3) << endl;
+       if(epoch == 2000) break;
+    }
 
-    cout << "The learning is has done!" << endl;
+    //do
+    //{
+
+
+    /*while(n1.GetError()*0.001 > n1.GetReducing() || n1.GetError()*0.001 < -n1.GetReducing())
+    {
+        for (size_t j = 0; j < rang; j++)
+        {
+            //cout << "[ " << j << " ]     " << endl;
+            for (size_t i = 0; i < 4; i++)
+            {
+                if (i <= 2)
+                {
+                    progress_iii[i] = data[i][j];
+                    //cout <<  " progress_iii[ " << i << " ] = " << progress_iii[i] << " " ;
+                }
+                else
+                {
+                    result_i = data[i][j];
+                    //cout << "  result_i = " << result_i << endl;
+                }
+            }
+            n1.Train(progress_iii, result_i);
+            if(size_t(j) == data[0].size()-1) epoch++;
+            //cout << ".";// << endl;
+            cout << " j: " << j  << "   epoch: " << epoch << "   errors: " << n1.GetError()  << "   weights: " << n1.GetWeight(1) << " | " << n1.GetWeight(2) << " | " << n1.GetWeight(3) << endl;
+            //cout << endl;
+       }
+    }*/
+ 
+
+    //} while (n1.GetError()*0.01 > n1.GetReducing() || n1.GetError()*0.01 < -n1.GetReducing());
+
+    cout << endl << "The learning of the neural network has done!" << endl;
+
+    //cout << " weights: " << n1.GetWeight(1) << " | " << n1.GetWeight(2) << " | " << n1.GetWeight(3) << endl;
     
-      
-
-
     ///////////////////////////////
 
     //test of out neuron:
     array<double,3> student_progress;
-    /*Konstantin remembers of the professor name (1)
-      Konstantin didn't visit any lectures of the professor (0)
-      Konstantin doesn't knows disciplince at all (0)
-
-      We want to know result of Konstantin*/
-
     
 
     string name_student;
     string user_text;
     double temp;
+
+    this_thread::sleep_for(chrono::seconds(2));
 
     cout << "____________________________________________" << endl;
     cout << "|                                          |" << endl;
