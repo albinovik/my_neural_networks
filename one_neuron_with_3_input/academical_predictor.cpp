@@ -4,7 +4,6 @@
 #include <string>//for getline() using in this program
 #include <sstream>//flows of strings
 #include <vector>//dynamic array from STL
-//#include <ctime>
 #include <chrono>
 #include <thread>
 
@@ -139,7 +138,7 @@ vector<vector<double>> read_file_for_leaning(string filename)
         cout << "Error to open your file" << endl;
     }
     else{
-        cout << "The file with name " << filename << " was opened." << endl;
+        cout << "The file with name \"" << filename << "\" was opened." << endl;
     }
 
     //tuple<string,double,double,double,double> temp;
@@ -197,24 +196,11 @@ int main(){
     cout << "Please wait for the finish of the neuron training. " << endl;
     cout << "It can take a few minutes " ;//<< endl;
 
-    double tim;  
-    tim = time(0);  
-    //int count = 0;
-
-    for(int i = 0; i < 10; i++)
+    /*for(int i = 0; i < 10; i++)
     {
-       // sleep(1);
-       // std::cout << "." << std::flush;
-       // sleep(1);
-       // std::cout << "." << std::flush;
-       // sleep(1);
-        //std::cout << "." << std::flush;
-       // sleep(1);
-        //while(time(0) - tim != 5) { } 
         this_thread::sleep_for(chrono::seconds(2));
         cout << ". " ;
-        //count++;
-    }
+    }*/
 
     int rang = int(data[0].size()); 
  
@@ -231,12 +217,16 @@ int main(){
 
             n1.Train(progress_iii, result_i);
 
-       }
-       //cout << ".";
-       epoch++;
-       //if(epoch % 50 == 0) {cout << "." ;}
-       //cout << "   epoch: " << epoch << "   errors: " << n1.GetError()  << "   weights: " << n1.GetWeight(1) << " | " << n1.GetWeight(2) << " | " << n1.GetWeight(3) << endl;
-       if(epoch == 2000) break;
+        }
+        //cout << ".";
+        epoch++;
+        if(epoch % 125 == 0) 
+        {
+            this_thread::sleep_for(chrono::seconds(1));
+            cout << ". " ;
+        }
+        //cout << "   epoch: " << epoch << "   errors: " << n1.GetError()  << "   weights: " << n1.GetWeight(1) << " | " << n1.GetWeight(2) << " | " << n1.GetWeight(3) << endl;
+        if(epoch == 2000) break;
     }
 
     //do
@@ -272,7 +262,7 @@ int main(){
 
     //} while (n1.GetError()*0.01 > n1.GetReducing() || n1.GetError()*0.01 < -n1.GetReducing());
 
-    cout << endl << "The learning of the neural network has done!" << endl;
+    cout << endl << "The training of the neuron has done!" << endl;
 
     //cout << " weights: " << n1.GetWeight(1) << " | " << n1.GetWeight(2) << " | " << n1.GetWeight(3) << endl;
     
@@ -290,8 +280,8 @@ int main(){
 
     cout << "____________________________________________" << endl;
     cout << "|                                          |" << endl;
-    cout << "|   WELCOME TO OUR ACADENICAL PREDICTOR!   |" << endl;
-    cout << "____________________________________________" << endl;
+    cout << "|   WELCOME TO OUR ACADEMICAL PREDICTOR!   |" << endl;
+    cout << "|__________________________________________|" << endl;
     cout << endl;
     cout <<  "You are the professor of a prestigious university." << endl;
     cout << "You are teaching the course \"Neuron Networks\"." << endl;
@@ -318,7 +308,7 @@ int main(){
         cin >> temp;
         student_progress[2] = temp;
 
-        cout << endl;
+        //cout << endl;
 
         double tmp = n1.InputData(student_progress);
 
