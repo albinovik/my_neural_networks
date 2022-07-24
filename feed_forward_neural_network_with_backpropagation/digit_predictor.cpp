@@ -55,10 +55,10 @@ int main(){
     //dataset.resize(tp, vector<int>(n));
     //dataset.resize(tp, vector<double>(0));
 
-    for (size_t i = 0; i < dataset.size(); i++)
+   /* for (size_t i = 0; i < dataset.size(); i++)
     {
-        /* code */
-    }
+        
+    }*/
     
 
     /*for (auto var : dataset)//for each 
@@ -68,7 +68,7 @@ int main(){
 
 
 
-   //vector<double> input = {0.01, 0.21, 0.45, 0.01, 0.21, 0.45};
+   vector<double> input = {0.01, 0.21, 0.45, 0.01, 0.21, 0.45};
    /*
    First layer cantains 3 neurons.
    Therefore, we can input data for 3 neurons only.
@@ -80,11 +80,21 @@ int main(){
 
     cout.precision(10);
 
-     vector<int> input;
+    /*vector<int> input;
+    for (size_t i = 0; i < init.size(); i++)
+    {
+        for (size_t j = 0; j < init[i]; j++)
+        {
+            input [i] = dataset[i][j] ;
+        }
+        cout << endl;
+    }*/
+
+    /* vector<int> input;
      for (size_t i = 0; i < count; i++)
      {
-        input[i]
-     }
+        input[i];
+     }*/
      
   
     double right_answers = 0, right, predict, maxra = 0;
