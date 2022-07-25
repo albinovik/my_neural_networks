@@ -5,42 +5,16 @@
 #include <fstream>//for work with files
 #include <cmath>//mathematical library from C (for pow() using)
 #include <vector>//dynamic array from STL    
-#include "neuron.hpp"   
-
-/*
-Neural network of direct propagation.
-Such famous network can recognize digits and letters.
-There is the MNIST dataset for this goal.
-But we make own dataset here for the program.
-*/
-
-/*
-We will calculate errors for each neurons as will be described below.
-Our error can be estimate as:
-
-delta(A) = (A'b) * delta(b) + (A'W)1 * delta(W)1 + (A'W)2 * delta(W)2 + (A'W)3 * delta(W)3 ...
-
-In my neuron A is output signal. It represented by sigmoid (S). 
-And b is value.
-Therefore:
-
-delta(A) = (S'value) * delta(value) + (S'W)1 * delta(W)1 + (S'W)2 * delta(W)2 + (S'W)3 * delta(W)3 ...
-
-We have to calculate the derivative of the sigmoid some times (S'b and so on).
-
-bla bla bla
-
-*/
+#include "neuron.hpp"
+#include <chrono>   
 
 using namespace std;
-
-//const size_t pixel_amount = 62500;//in initial data
 
 /////////////////////////////////////////////////////
 class Network
 {
 private:
-    int layers;//anout of layers in a neural netwrok
+    int layers;//amout of layers in a neural netwrok
     Neuron **neurons;//2D array for neurons keeping
     double ***weights;//3D aray to keep of bound weights
     double **b_shift_weights;//2D array for b_shift keeping
@@ -53,17 +27,13 @@ public:
     void SetFirstLayer(vector<double> &array);//initial data for neuron wetwork (for first layer)
     int MaximumIndex(double *value, int size);//search maximum value in output layer
     void NeuronsLayerActivization(vector<int> &each_layers, int LayerNumber);//each neuron in one layer of the network executes function act()
-    //void NeuronsLayerActivization(int LayerNumber);
-
     int ForwardFeed(vector<int> &each_layers);//all neurons in the network executes function act()
     void BackPropogation(vector<int> &each_layers, int right_answer);//errors calculation
+    int CycleOfTrain(vector<int> &neurons_in_each_layer, vector<double> &input_data, int right_answer, double learning_rate);
     void WeightsUpdater(vector<int> &each_layers, double learning_rate);//recalculation of weights for bounds
-    //void ErrorLayerCounter(vector<int> &each_layers, int LayerNumber);//function for calculation of error of the network whole 
-    
-    //void ErrorCounter(int LayerNumber, int start, int stop, double prediction, double rresult, double lr); 
     
     void PrintOutputValues(vector<int> &each_layers, int order);//for printing of final result
-    void SaveWeights(vector<int> &each_layers);//to save weight for the future
+    void SaveWeights(vector<int> &each_layers);//to save weight for the future   
 };
 
 /*Network::Network()
@@ -230,6 +200,31 @@ void Network::BackPropogation(vector<int> &each_layers, int right_answer) {
 	}
 }
 
+/*int Network::CycleOfTrain(Network &n, vector<int> &neurons_in_each_layer, vector<double> &input_data, int right_answer, double learning_rate)
+{
+    //Network tmp(neurons_in_each_layer);
+    n.SetFirstLayer(input_data);
+    int predict = n.ForwardFeed(neurons_in_each_layer);
+    if (predict != right_answer) {
+        n.BackPropogation(neurons_in_each_layer, right_answer);
+        n.WeightsUpdater(neurons_in_each_layer, learning_rate);
+        return 0;
+    }
+    else return 1;
+}*/
+
+int Network::CycleOfTrain(vector<int> &neurons_in_each_layer, vector<double> &input_data, int right_answer, double learning_rate)
+{
+    SetFirstLayer(input_data);
+    int predict = ForwardFeed(neurons_in_each_layer);
+    if (predict != right_answer) {
+        BackPropogation(neurons_in_each_layer, right_answer);
+        WeightsUpdater(neurons_in_each_layer, learning_rate);
+        return 0;
+    }
+    else return 1;
+}
+
 void Network::WeightsUpdater(vector<int> &each_layers, double learning_rate) 
 {
     for (int i = 0; i < layers - 1; i++)
@@ -249,8 +244,6 @@ void Network::WeightsUpdater(vector<int> &each_layers, double learning_rate)
 		}
 	}
 }
-
-
 
 void Network::PrintOutputValues(vector<int> &each_layers, int order)
 {
@@ -307,5 +300,7 @@ void Network::SaveWeights(vector<int> &each_layers)
 
     fin.close();
 }*/
+
+
 
 #endif
