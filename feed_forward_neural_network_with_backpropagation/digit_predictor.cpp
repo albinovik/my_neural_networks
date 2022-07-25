@@ -9,12 +9,8 @@
 
 int main(){
 
-
-
-    //double r1, r2, r3;
-
     vector<int> init = {6, 4, 3, 3};
-    size_t tp = init.size();
+    //size_t tp = init.size();
     /*
     first layer contains 6 neurons
     second layer contains 4 neurons
@@ -22,79 +18,59 @@ int main(){
     fourth layer contains 3 neurons
     */
 
-
     Network n(init);
 
     cout.precision(10);
-    //vector<vector<double>> dataset;
 
-   /* for (size_t i = 0; i < init.size(); i++)
-    {
-        dataset.resize(tp, vector<double>(init[i]));
-    }
+    vector<double> data = {0, 1, 2, 3};
 
-    for (size_t i = 0; i < init.size(); i++)
-    {
-        for (size_t j = 0; j < init[i]; j++)
-        {
-            dataset[i][j] = (rand() * 0.5) / 100.0;
-        }
-    }*/
-
-   /* for (size_t i = 0; i < init.size(); i++)
-    {
-        for (size_t j = 0; j < init[i]; j++)
-        {
-            cout << dataset[i][j] << " ";
-        }
-        cout << endl;
-    }*/
-    
-    /*for (size_t j = 0; j < init[i]; j++)
-    {
-        for (size_t i = 0; i < init.size(); i++)
-        {
-            cout << dataset[i][j] << " ";
-        }
-        cout << endl;
-    }*/
-
-    //dataset.resize(tp, vector<int>(n));
-    //dataset.resize(tp, vector<double>(0));
-
-   /* for (size_t i = 0; i < dataset.size(); i++)
-    {
-        
-    }*/
-    
-
-    /*for (auto var : dataset)//for each 
+    /*for (auto var : data)//for each 
     {
         cout << var << endl;
     }*/
-
-
-
-   // vector<double> input = {0.01, 0.21, 0.45, 0.01, 0.21, 0.45};
 
     vector<double> input;
     //cout << init.capacity() << endl;
 
     vector<vector<double>> ss;
-    ss.resize(50, vector<double>(3));
+    ss.resize(50, vector<double>(4));
     
-
+    int g = 0;
     for (size_t i = 0; i < 50; i++)
     {
         //cout << "["<< i << "] " ;
-        for (size_t j = 0; j < 3; j++)
+        for (size_t j = 0; j < 4; j++)
         {
-            ss[i][j] =  ((rand() * 0.05) / 10000.0);
+            if (j <= 2)
+            {
+                 ss[i][j] = ((rand() * 0.05) / 10000.0);
+            }
+            else
+            {
+                if (g < 10)
+                {
+                    ss[i][j] = 0;
+                }
+                if( g >= 10 && g < 20)
+                {
+                    ss[i][j] = 1;
+                }
+                if( g >= 20 && g < 30)
+                {
+                    ss[i][j] = 2;
+                }
+                if( g >= 30)
+                {
+                    ss[i][j] = 3;
+                }
+            }
+            
             //cout << "\t   [" << j << "] =  " << ss[i][j] << endl;
         }
+        g++;
     }
 
-    vector<double> data = {0, 1, 2};
+    //vector<double> data = {0, 1, 2};
 
     //int ppp = ss[0].size();
     //cout << ppp << endl << endl;
@@ -104,13 +80,13 @@ int main(){
     chrono::duration<double> time;
     //double learning_rate = 0.15 * exp(-epoch / 20.);
     double lr = 0.15 * exp(-epoch / 20.);
-    int examples = 100;
+    int examples = 101;
     int repeat = 0, tail = 0;
     //vector<int> re_examples;
 
     auto begin = chrono::steady_clock::now();
     //while (((right_answers / examples) * 100 ) < 100) {
-        right_answers = 0;
+        int right_answers_number = 0;
         auto t1 = chrono::steady_clock::now();
 
         //calculation of steps of training
@@ -118,75 +94,22 @@ int main(){
         //cout << "repeat = " << repeat << endl;
         if(repeat == 0) 
         {
-            int add_i = 0;
-            while(add_i < examples)
-            {
-                for (size_t i = 0; i < ss[0].size(); i++)
-                { 
-                    input.push_back(ss[add_i][i]);   
-                }
-
-                right = data[add_i];
-                count = n.CycleOfTrain(init, input, right, lr);
-                right_answers += count;
-                cout << right_answers << endl;
-
-                add_i++;
-                input.clear();
-            }
+            right_answers_number = n.RepeatCycleOfTrain(init, ss, lr, examples);
+            cout << " right_answers_number = "<< right_answers_number << endl;
         }
         else
         {
             vector<int> re_examples(repeat, ss.size());
-            tail = ((repeat * ss.size()) -examples);
+            tail = (examples - (repeat * ss.size()));
             re_examples.push_back(tail);
-            //re_examples.shrink_to_fit();
 
             int add_j = 0;
-            while(add_j < re_examples.size()-1)
+            while(add_j < re_examples.size())
             {
-           // for (size_t k = 0; k < re_examples.size()-1; k++)
-           // {
-                //cout << re_examples[k] << endl;
-                int add_i = 0;
-                while(add_i < re_examples[add_j])
-                {
-                    for (size_t k = 0; k < ss[0].size(); k++)
-                    { 
-                        double gg = ss[add_i][k];
-                        input.push_back(gg);   
-                    }
-
-                    right = data[add_i];
-                    count = n.CycleOfTrain(init, input, right, lr);
-                    right_answers += count;
-                    cout << right_answers << endl;
-
-                    add_i++;
-                    input.clear();
-                }
-           // }
-            add_j++;
+                cout << re_examples[add_j] << endl;
+                right_answers_number = n.RepeatCycleOfTrain(init, ss, lr, re_examples[add_j]);
+                add_j++;
             }
-
-
-
-        /* for (size_t k = 0; k < re_examples.size(); k++) 
-            {
-            for(size_t j = 0; j < re_examples[k]; j++)
-            {
-                for (size_t i = 0; i < 3; i++)
-                {
-                    input.push_back(ss[j][i]);
-                    right = data[i];
-                    count = n.CycleOfTrain(init, input, right, lr);
-                    right_answers += count;
-                    //cout << right_answers << endl;
-                }
-                cout << "j = " << endl;
-            }
-        }*/
-
         }
         
 

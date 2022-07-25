@@ -30,6 +30,7 @@ public:
     int ForwardFeed(vector<int> &each_layers);//all neurons in the network executes function act()
     void BackPropogation(vector<int> &each_layers, int right_answer);//errors calculation
     int CycleOfTrain(vector<int> &neurons_in_each_layer, vector<double> &input_data, int right_answer, double learning_rate);
+    int RepeatCycleOfTrain(vector<int> &neurons_in_each_layer, vector<vector<double>> &data, double learning_rate, int examples);
     void WeightsUpdater(vector<int> &each_layers, double learning_rate);//recalculation of weights for bounds
     
     void PrintOutputValues(vector<int> &each_layers, int order);//for printing of final result
@@ -224,6 +225,31 @@ int Network::CycleOfTrain(vector<int> &neurons_in_each_layer, vector<double> &in
     }
     else return 1;
 }
+
+int Network::RepeatCycleOfTrain(vector<int> &neurons_in_each_layer, vector<vector<double>> &data, double learning_rate, int examples)
+{
+    vector<double> input;
+    int add_i = 0;
+    double right = 0.0, right_answers = 0.0;
+    int count = 0;
+    while(add_i < examples)
+    {
+        for (size_t i = 0; i < data[0].size()-1; i++)
+        { 
+            input.push_back(data[add_i][i]);   
+        }
+
+        right = data[add_i][data[0].size()-1];
+        count = CycleOfTrain(neurons_in_each_layer, input, right, learning_rate);
+        right_answers += count;
+        //cout << right  << "  "<< right_answers << endl;
+
+        add_i++;
+        input.clear();
+    }
+    return right_answers;
+}
+
 
 void Network::WeightsUpdater(vector<int> &each_layers, double learning_rate) 
 {
