@@ -201,19 +201,6 @@ void Network::BackPropogation(vector<int> &each_layers, int right_answer) {
 	}
 }
 
-/*int Network::CycleOfTrain(Network &n, vector<int> &neurons_in_each_layer, vector<double> &input_data, int right_answer, double learning_rate)
-{
-    //Network tmp(neurons_in_each_layer);
-    n.SetFirstLayer(input_data);
-    int predict = n.ForwardFeed(neurons_in_each_layer);
-    if (predict != right_answer) {
-        n.BackPropogation(neurons_in_each_layer, right_answer);
-        n.WeightsUpdater(neurons_in_each_layer, learning_rate);
-        return 0;
-    }
-    else return 1;
-}*/
-
 int Network::CycleOfTrain(vector<int> &neurons_in_each_layer, vector<double> &input_data, int right_answer, double learning_rate)
 {
     SetFirstLayer(input_data);
