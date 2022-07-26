@@ -229,7 +229,7 @@ int Network::RepeatCycleOfTrain(vector<int> &neurons_in_each_layer, vector<vecto
         right = data[add_i][data[0].size()-1];
         count = CycleOfTrain(neurons_in_each_layer, input, right, learning_rate);
         right_answers += count;
-        //cout << right  << "  "<< right_answers << endl;
+        cout << right  << "  "<< right_answers << endl;
 
         add_i++;
         input.clear();
