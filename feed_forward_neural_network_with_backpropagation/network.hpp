@@ -39,16 +39,12 @@ public:
     void Train(vector<int> &neurons_in_each_layer, Dataset data, int examples);//Full neural network training with the default learning_rate
     
     //the work with the final data
-<<<<<<< HEAD
     //void SaveWeights(vector<int> &each_layers, std::ofstream &fout);
     void SaveWeights(vector<int> &each_layers, std::ofstream &fout1, std::ofstream &fout2);
 
     //for testing
     void ReadWeights(vector<int> &each_layers, std::ifstream &fin1, std::ifstream &fin2);
     void Test(vector<int> &each_layers, Dataset datatest);
-=======
-    void SaveWeights(vector<int> &each_layers, std::ofstream &fout);
->>>>>>> cecdbdf57ff9bb8e4621578ed7e44b327c7b98f6
 };
 
 
