@@ -204,11 +204,18 @@ void Network::RepeatCyclesOfTrain(vector<int> &neurons_in_each_layer, Dataset da
     chrono::duration<double> time;
     int count = 0;
     
+<<<<<<< HEAD
     ////////////////////////////////////////////////////////////////////////////////////
     ofstream fout1, fout2;//element of ofstream class is creating                    ///
     fout1.open("b_shifts.txt");//file "b_shifts.txt" for b_shifts writing is opening ///
     fout2.open("weights.txt");//file "weights.txt" for weights writing is opening    ///
     ////////////////////////////////////////////////////////////////////////////////////
+=======
+    ////////////////////////////////////////////////////////////////////////////////
+    ofstream fout;//element of ofstream class is creating                        ///
+    fout.open("weights.txt");//file "weights.txt" for weights writing is opening ///
+    ////////////////////////////////////////////////////////////////////////////////
+>>>>>>> cecdbdf57ff9bb8e4621578ed7e44b327c7b98f6
 
     auto begin = chrono::steady_clock::now();
     while((right_answers_number / examples * 100 ) < 100)
@@ -233,11 +240,18 @@ void Network::RepeatCyclesOfTrain(vector<int> &neurons_in_each_layer, Dataset da
     time = end - begin;
     cout << "TIME: " << time.count() / 60. << " min" << endl;
 
+<<<<<<< HEAD
     /////////////////////////////////////////////////////////////////////////////////
     SaveWeights(neurons_in_each_layer, fout1, fout2);                             ///
     fout1.close();                                                                ///
     fout2.close();                                                                ///
     /////////////////////////////////////////////////////////////////////////////////
+=======
+    ////////////////////////////////////////////////////////////////////////////////
+    SaveWeights(neurons_in_each_layer, fout);                                    ///
+    fout.close();                                                                ///
+    ////////////////////////////////////////////////////////////////////////////////
+>>>>>>> cecdbdf57ff9bb8e4621578ed7e44b327c7b98f6
 }
 
 
@@ -253,11 +267,18 @@ void Network::RepeatCyclesOfTrain(vector<int> &neurons_in_each_layer, Dataset da
     int count = 0;
     //cout << "1:       I AM WORKING UNTIL HERE!!!" << endl;
 
+<<<<<<< HEAD
     ////////////////////////////////////////////////////////////////////////////////////
     ofstream fout1, fout2;//element of ofstream class is creating                    ///
     fout1.open("b_shifts.txt");//file "b_shifts.txt" for b_shifts writing is opening ///
     fout2.open("weights.txt");//file "weights.txt" for weights writing is opening    ///
     ////////////////////////////////////////////////////////////////////////////////////
+=======
+    ////////////////////////////////////////////////////////////////////////////////
+    ofstream fout;//element of ofstream class is creating                        ///
+    fout.open("weights.txt");//file "weights.txt" for weights writing is opening ///
+    ////////////////////////////////////////////////////////////////////////////////
+>>>>>>> cecdbdf57ff9bb8e4621578ed7e44b327c7b98f6
 
     //cout << "2:       I AM WORKING UNTIL HERE!!!" << endl;
 
@@ -293,11 +314,18 @@ void Network::RepeatCyclesOfTrain(vector<int> &neurons_in_each_layer, Dataset da
     time = end - begin;
     cout << "TIME: " << time.count() / 60. << " min" << endl;
 
+<<<<<<< HEAD
     /////////////////////////////////////////////////////////////////////////////////
     SaveWeights(neurons_in_each_layer, fout1, fout2);                             ///
     fout1.close();                                                                ///
     fout2.close();                                                                ///
     /////////////////////////////////////////////////////////////////////////////////
+=======
+    ////////////////////////////////////////////////////////////////////////////////
+    SaveWeights(neurons_in_each_layer, fout);                                    ///
+    fout.close();                                                                ///
+    ////////////////////////////////////////////////////////////////////////////////
+>>>>>>> cecdbdf57ff9bb8e4621578ed7e44b327c7b98f6
 }
 
 
@@ -352,16 +380,23 @@ void Network::WeightsUpdater(vector<int> &each_layers, double learning_rate)
 }
 
 
+<<<<<<< HEAD
 //void Network::SaveWeights(vector<int> &each_layers, std::ofstream &fout)
 void Network::SaveWeights(vector<int> &each_layers, std::ofstream &fout1, std::ofstream &fout2)
 {
     /* if (fout.is_open())
+=======
+void Network::SaveWeights(vector<int> &each_layers, std::ofstream &fout)
+{
+     if (fout.is_open())
+>>>>>>> cecdbdf57ff9bb8e4621578ed7e44b327c7b98f6
     {
         cout << "File for writing of final weights is opened." << endl;
     }
     else
     {
         cout << "Error to open file for writing of final weights." << endl;
+<<<<<<< HEAD
     }*/
 
     if (fout1.is_open() && fout2.is_open())
@@ -371,6 +406,8 @@ void Network::SaveWeights(vector<int> &each_layers, std::ofstream &fout1, std::o
     else
     {
         cout << "Error to open files for writing of final weights and b_shifts." << endl;
+=======
+>>>>>>> cecdbdf57ff9bb8e4621578ed7e44b327c7b98f6
     }
 
 
@@ -378,6 +415,7 @@ void Network::SaveWeights(vector<int> &each_layers, std::ofstream &fout1, std::o
     {
         for (int j = 0; j < each_layers[i]; j++)
         {
+<<<<<<< HEAD
             fout1 << b_shift_weights[i][j] << endl;
 
             for (int k = 0; k < each_layers[i + 1]; k++)
@@ -457,4 +495,16 @@ void Network::Test(vector<int> &each_layers, Dataset datatest)
     cout << "right answer = " << right_answer_for_test << endl;
     cout << "network answer: " << prediction_for_test << endl;
 
+=======
+            for (int k = 0; k < each_layers[i + 1]; k++)
+            {
+                fout << weights[i][j][k] << endl;
+            }                   
+        }  
+        if(i == 1) 
+        {
+            cout << "The writing of weights has been completed successfully." << endl;
+        }                 
+    }
+>>>>>>> cecdbdf57ff9bb8e4621578ed7e44b327c7b98f6
 }

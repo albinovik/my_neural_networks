@@ -36,7 +36,11 @@ int main(){
     /////////////////////////////////////////////////////////////////////////////////
     if(user_choice == 1)
     {
+<<<<<<< HEAD
         Dataset dataset("MNIST.txt");
+=======
+        Dataset dataset("digits.txt");
+>>>>>>> cecdbdf57ff9bb8e4621578ed7e44b327c7b98f6
 
         vector<int> init = {784, 256, 10};
         /*
@@ -46,6 +50,7 @@ int main(){
         */
 
         Network n(init);
+<<<<<<< HEAD
         n.Train(init,dataset, 400);
         //testing process ///////////////////////////////////////////////////////////
         string user_text;
@@ -65,6 +70,9 @@ int main(){
 
 
 
+=======
+        n.Train(init,dataset, 200);
+>>>>>>> cecdbdf57ff9bb8e4621578ed7e44b327c7b98f6
     }
 
     /////////////////////////////////////////////////////////////////////////////////
@@ -76,7 +84,11 @@ int main(){
         
         Dataset dataset("letters.txt");
         
+<<<<<<< HEAD
         vector<int> init = {784, 130, 26};
+=======
+        vector<int> init = {784, 256, 26};
+>>>>>>> cecdbdf57ff9bb8e4621578ed7e44b327c7b98f6
         /*
         first layer contains 784 neurons
         second layer contains 100 neurons
@@ -87,6 +99,7 @@ int main(){
 
         n.Train(init, dataset, 200, 1);
 
+<<<<<<< HEAD
         //testing process ///////////////////////////////////////////////////////////
         string user_text;
         while(1)
@@ -108,6 +121,8 @@ int main(){
 
         //n.Test(init, rtyu);
 
+=======
+>>>>>>> cecdbdf57ff9bb8e4621578ed7e44b327c7b98f6
     }
 
     /////////////////////////////////////////////////////////////////////////////////
@@ -129,6 +144,7 @@ int main(){
         Network n(init);
 
         n.Train(init, dataset, 30, 1);
+<<<<<<< HEAD
 
 
         //testing process ///////////////////////////////////////////////////////////
@@ -146,6 +162,8 @@ int main(){
             cin >> user_text;
             if(user_text == "No" || user_text == "no") break;
         }
+=======
+>>>>>>> cecdbdf57ff9bb8e4621578ed7e44b327c7b98f6
     }
 
 

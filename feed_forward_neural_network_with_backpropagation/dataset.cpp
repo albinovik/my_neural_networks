@@ -1,15 +1,22 @@
+<<<<<<< HEAD
 #include <dirent.h>//for work with directory
+=======
+>>>>>>> cecdbdf57ff9bb8e4621578ed7e44b327c7b98f6
 #include <iostream>//for work in console
 #include <fstream>//for work with files
 #include "structnet.hpp"//sturctures of different images
 #include "dataset.hpp"
 #include <map>//container
+<<<<<<< HEAD
 //#include <string>
 //#include <cstdio>
+=======
+>>>>>>> cecdbdf57ff9bb8e4621578ed7e44b327c7b98f6
 
 using namespace std;
 
 
+<<<<<<< HEAD
 /////////////////////////////////////////////////////////////////////////////////////////
 //                               Dataset from lybrary                                  //
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -236,6 +243,12 @@ Dataset::Dataset(string filename, char mode)
 {
     //MNIST data
     if (mode == 'd')
+=======
+Dataset::Dataset(string filename)
+{
+    //MNIST data
+    if (filename == "digits.txt")
+>>>>>>> cecdbdf57ff9bb8e4621578ed7e44b327c7b98f6
     {
         ifstream fin;//entry flow in file
 
@@ -277,7 +290,11 @@ Dataset::Dataset(string filename, char mode)
     }
 
     //my own data of letters
+<<<<<<< HEAD
     if (mode == 'l')
+=======
+    if (filename == "letters.txt")
+>>>>>>> cecdbdf57ff9bb8e4621578ed7e44b327c7b98f6
     {
         map<char,int> latin_alphabet{
         {'A', 0},{'B', 1},{'C', 2},{'D', 3},{'E', 4},{'F', 5},
@@ -338,8 +355,13 @@ Dataset::Dataset(string filename, char mode)
     }    
 
 
+<<<<<<< HEAD
     //my own data of letters
     if (mode == 's')
+=======
+    //my own data of shapes
+    if (filename == "shapes.txt")
+>>>>>>> cecdbdf57ff9bb8e4621578ed7e44b327c7b98f6
     {
         map<char,int> shps{
         {'C', 0},{'S', 1},{'T', 2}
@@ -401,8 +423,11 @@ Dataset::Dataset(string filename, char mode)
     }   
 }
 
+<<<<<<< HEAD
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 
+=======
+>>>>>>> cecdbdf57ff9bb8e4621578ed7e44b327c7b98f6
 Dataset::~Dataset()
 {}
 
