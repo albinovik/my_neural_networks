@@ -1,13 +1,15 @@
+#include <dirent.h>//for work with directory
 #include <iostream>//for work in console
 #include <fstream>//for work with files
 #include <vector>//dynamic array from STL
-//#include <array>//static array from STL
 #include <chrono>//for time calculation
 #include <cmath>    
 #include "reluneuron.hpp"//sturcture of neuron
 #include "structnet.hpp"//sturctures of different images
 #include "dataset.hpp"//structure of dataset 
+#include "converters.hpp"
 #include "network.hpp"
+
 
 using namespace std;
 
@@ -444,7 +446,7 @@ void Network::Test(vector<int> &each_layers, Dataset datatest)
     ifstream fin2;                                        ///
     fin2.open("weights.txt");                             ///
                                                           ///
-    ReadWeights(each_layers, fin1, fin2);       ///
+    ReadWeights(each_layers, fin1, fin2);                 ///
                                                           ///
     fin1.close();                                         ///
     fin2.close();                                         ///
@@ -456,5 +458,212 @@ void Network::Test(vector<int> &each_layers, Dataset datatest)
     cout << "Result of testing: " << endl;
     cout << "right answer = " << right_answer_for_test << endl;
     cout << "network answer: " << prediction_for_test << endl;
+
+}
+
+void Network::Test(vector<int> &each_layers, Dataset datatest, char mode)
+{
+
+     /*
+    mode can be one of the three values:
+    1) digits - d
+    2) letters - l
+    3) shapes - s
+
+    it can be used in specific tasks:
+    1) recognition of digit (from 0 to 9)
+    2) recognition of letter of latin alphabet (from A to Z)
+    3) recognition of shapes (circle, square, triangle)
+    */
+
+    cout << "TESTING OF NEURAL NETWORK IS STARTING. " << endl;
+
+    double right_answer_for_test = datatest.GetElement(0);
+    //cout << "right_answer for test: " << right_answer << endl;
+
+    /////////////////////////////////////////////////////////
+    //loading in the network rights weights and b_shifts   //
+    /////////////////////////////////////////////////////////
+    ifstream fin1;                                        ///
+    fin1.open("b_shifts.txt");                            ///
+    ifstream fin2;                                        ///
+    fin2.open("weights.txt");                             ///
+                                                          ///
+    ReadWeights(each_layers, fin1, fin2);       ///
+                                                          ///
+    fin1.close();                                         ///
+    fin2.close();                                         ///
+    /////////////////////////////////////////////////////////
+
+    SetFirstLayer(datatest.GetPixelLayer(0));
+    int prediction_for_test = ForwardFeed(each_layers);
+
+   /* cout << "Result of testing: " << endl;
+    cout << "right answer = " << right_answer_for_test << endl;
+    cout << "network answer: " << prediction_for_test << endl;*/
+
+    if (mode == 'd')
+    {
+        double sum = 0.0;
+        double res[each_layers[layers - 1]];
+        for (int i = 0; i < each_layers[layers - 1]; i++)
+        {
+            res[i] = neurons[layers - 1][i].GetValue();
+            if(res[i] <0) res[i] = 0;
+            sum += res[i];
+        }
+    
+    ConverterToLDigits(res, sum);
+    }
+
+    if (mode == 'l')
+    {
+        double sum = 0.0;
+        double res[each_layers[layers - 1]];
+        for (int i = 0; i < each_layers[layers - 1]; i++)
+        {
+            res[i] = neurons[layers - 1][i].GetValue();
+            if(res[i] <0) res[i] = 0;
+            sum += res[i];
+        }
+    
+    ConverterToLetters(res, sum);
+    }
+
+    if (mode == 's')
+    {
+        double sum = 0.0;
+        double res[each_layers[layers - 1]];
+        for (int i = 0; i < each_layers[layers - 1]; i++)
+        {
+            res[i] = neurons[layers - 1][i].GetValue();
+            if(res[i] <0) res[i] = 0;
+            sum += res[i];
+        }
+    
+    ConverterToShapes(res, sum);
+    }
+    
+
+   
+
+}
+
+
+void Network::TestLib(vector<int> &each_layers, Dataset datatest, char mode)
+{
+
+    /*
+    mode can be one of the three values:
+    1) digits - d
+    2) letters - l
+    3) shapes - s
+
+    it can be used in specific tasks:
+    1) recognition of digit (from 0 to 9)
+    2) recognition of letter of latin alphabet (from A to Z)
+    3) recognition of shapes (circle, square, triangle)
+    */
+
+    if (mode == 'd')
+    {
+
+            cout << "TESTING OF NEURAL NETWORK IS STARTING. " << endl;
+
+            double right_answer_for_test = datatest.GetElement(0);
+
+            ifstream fin1;                                       
+            fin1.open("./lib/MNIST_right_b_shifts_784_256_10.txt");                           
+            ifstream fin2;                                       
+            fin2.open("./lib/MNIST_right_weights_784_256_10.txt");  
+
+            ReadWeights(each_layers, fin1, fin2); 
+            fin1.close();                                         
+            fin2.close();
+
+            SetFirstLayer(datatest.GetPixelLayer(0));
+            int prediction_for_test = ForwardFeed(each_layers);
+            cout << prediction_for_test << endl;
+            cout << right_answer_for_test << endl;
+
+            double sum = 0.0;
+            double res[each_layers[layers - 1]];
+            for (int i = 0; i < each_layers[layers - 1]; i++)
+             {
+                res[i] = neurons[layers - 1][i].GetValue();
+                if(res[i] <0) res[i] = 0;
+                sum += res[i];;
+             }
+    
+            ConverterToLDigits(res, sum);
+
+    }
+
+
+    if (mode == 'l')
+    {
+            cout << "TESTING OF NEURAL NETWORK IS STARTING. " << endl;
+
+            double right_answer_for_test = datatest.GetElement(0);
+
+            ifstream fin1;                                       
+            fin1.open("./lib/letters_right_b_shifts_784_130_26.txt");                           
+            ifstream fin2;                                       
+            fin2.open("./lib/letters_right_weights_784_130_26.txt");  
+
+            ReadWeights(each_layers, fin1, fin2); 
+            fin1.close();                                         
+            fin2.close();
+
+            SetFirstLayer(datatest.GetPixelLayer(0));
+            int prediction_for_test = ForwardFeed(each_layers);
+            cout << prediction_for_test << endl;
+
+            double sum = 0.0;
+            double res[each_layers[layers - 1]];
+            for (int i = 0; i < each_layers[layers - 1]; i++)
+             {
+                res[i] = neurons[layers - 1][i].GetValue();
+                if(res[i] <0) res[i] = 0;
+                sum += res[i];
+             }
+    
+            ConverterToLetters(res, sum);
+
+    }
+
+
+
+    if (mode == 's')
+    {
+            cout << "TESTING OF NEURAL NETWORK IS STARTING. " << endl;
+
+            double right_answer_for_test = datatest.GetElement(0);
+
+            ifstream fin1;                                       
+            fin1.open("./lib/shapes_right_b_shifts_784_33_3.txt");                           
+            ifstream fin2;                                       
+            fin2.open("./lib/shapes_right_weights_784_33_3.txt");  
+
+            ReadWeights(each_layers, fin1, fin2); 
+            fin1.close();                                         
+            fin2.close();
+
+            SetFirstLayer(datatest.GetPixelLayer(0));
+            int prediction_for_test = ForwardFeed(each_layers);
+            cout << prediction_for_test << endl;
+
+            double sum = 0.0;
+            double res[each_layers[layers - 1]];
+            for (int i = 0; i < each_layers[layers - 1]; i++)
+             {
+                res[i] = neurons[layers - 1][i].GetValue();
+                if(res[i] <0) res[i] = 0;
+                sum += res[i];
+             }
+    
+            ConverterToShapes(res, sum);
+
+    }
 
 }

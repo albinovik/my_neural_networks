@@ -45,6 +45,8 @@ public:
     //for testing
     void ReadWeights(vector<int> &each_layers, std::ifstream &fin1, std::ifstream &fin2);
     void Test(vector<int> &each_layers, Dataset datatest);
+    void Test(vector<int> &each_layers, Dataset datatest, char mode);
+    void TestLib(vector<int> &each_layers, Dataset datatest, char mode);
 };
 
 

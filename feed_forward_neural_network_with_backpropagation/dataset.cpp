@@ -1,17 +1,16 @@
 #include <dirent.h>//for work with directory
 #include <iostream>//for work in console
 #include <fstream>//for work with files
+#include <map>//container
 #include "structnet.hpp"//sturctures of different images
 #include "dataset.hpp"
-#include <map>//container
-//#include <string>
-//#include <cstdio>
+
 
 using namespace std;
 
 
 /////////////////////////////////////////////////////////////////////////////////////////
-//                               Dataset from lybrary                                  //
+//                               Dataset from library                                  //
 /////////////////////////////////////////////////////////////////////////////////////////
 
 Dataset::Dataset(string filename)
@@ -401,7 +400,8 @@ Dataset::Dataset(string filename, char mode)
     }   
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 
 Dataset::~Dataset()
 {}
@@ -425,3 +425,5 @@ double *Dataset::GetPixelLayer(int i)
 {
     return data[i].pixels;
 }
+
+
